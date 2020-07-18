@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
-    email: String,
-    mane: String,
+    email: { type: String, required: true },
+    mane: { type: String, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     picture: String,
-    admin: Boolean,
-    e_grid: Boolean,
-    v_grid: Boolean,
+    admin: { type: Boolean, default: false },
+    eGrid: { type: Boolean, default: true },
+    vGrid: { type: Boolean, default: true },
     deleted: Date
 });
 

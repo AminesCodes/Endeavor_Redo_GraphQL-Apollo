@@ -4,20 +4,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const volunteerSchema = new Schema({
-    email: String,
-    mane: String,
+    email: { type: String, required: true },
+    mane: { type: String, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     picture: String,
-    cohortId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cohort'},
-    confirmed: Boolean,
+    confirmed: { type: Boolean, default: false },
     company: String,
     parsedCompany: String,
     title: String,
     v_bio: String,
     linkedIn: String,
-    publicProfile: Boolean,
-    e_grid: Boolean,
-    v_grid: Boolean,
+    publicProfile: { type: Boolean, default: false },
+    eGrid: { type: Boolean, default: true },
+    vGrid: { type: Boolean, default: true },
     deleted: Date
 });
 
