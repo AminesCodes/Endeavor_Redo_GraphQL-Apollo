@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose');
 const cors = require('cors');
 
 const graphqlHTTP = require('express-graphql');
@@ -25,8 +26,8 @@ const mongooseConfig = {
     useNewUrlParser: true,
     useUnifiedTopology: true 
 };
-// Need to copy link from mlab.com and replace username, password, port and database name
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PSW}@${process.env.DB_NAME_LINK}-cuhui.mongodb.net/${process.env.DB_NAME_LINK}?retryWrites=true&w=majority`;
+// Need to copy link from mlab.com and replace username, password, port and database name in .env File
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PSW}@${process.env.DB_NAME_LINK}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(uri, mongooseConfig);
 mongoose.connection.once('open', () => {
     console.log('Successfully connected to cloud database');
