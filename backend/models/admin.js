@@ -6,7 +6,8 @@ const Schema = mongoose.Schema;
 const adminSchema = new Schema({
     email: String,
     mane: String,
-    userId: String,
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    picture: String,
     admin: Boolean,
     e_grid: Boolean,
     v_grid: Boolean,
