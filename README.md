@@ -2,9 +2,16 @@
 
 *A volunteer management full-stack app developed to backbone an organization’s engagement with and availment of its industry volunteers community force.*
 
+### Note
+This project is a redo of the original Endeavor (a group project) that you can find [here](https://github.com/Briahana-Mauge/Endeavor).
+The Redo objectives are:
+  - Use MongoDB instead of PostgreSQL
+  - Use GraphQL for accessing data
+  - Use Apollo to do the network requests
+
 ## **Developers**
-+ [Anime Bensalem (@AminesCodes)](https://github.com/AminesCodes) [[LI]](https://www.linkedin.com/in/amine-bensalem/)
-+ [Briahana Maugé (@Briahana-Mauge)](https://github.com/Briahana-Mauge) [[LI]](https://www.linkedin.com/in/bmauge/)
++ [Anime Bensalem (@AminesCodes)](https://github.com/AminesCodes) [[LinkedIn]](https://www.linkedin.com/in/amine-bensalem/)
+<!-- + [Briahana Maugé (@Briahana-Mauge)](https://github.com/Briahana-Mauge) [[LI]](https://www.linkedin.com/in/bmauge/)
 + [Joseph P. Pasaoa (@joseph-p-pasaoa)](https://github.com/joseph-p-pasaoa) [[LI]](https://www.linkedin.com/in/josephpasaoa/)
 
 ## **Demos**
@@ -200,4 +207,4 @@ start, end, topic, description, staffDescription, attendees, location, instructo
 + Fellow Users Build
 + Non-Admin Staff Build
 + Admininstrative Externalities Settings (SendGrid ID, Google Calendar Account Target, etc.)
-+ Theming & Branding Customization
++ Theming & Branding Customization -->
