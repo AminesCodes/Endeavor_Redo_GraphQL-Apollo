@@ -1,0 +1,36 @@
+{
+  "name": "capstone-g1",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./backend/app",
+    "dev": "nodemon ./backend/app",
+    "front": "cd frontend && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "original_project": {
+    "author": "Amine Bensalem, Briahana Maugé, Joseph P. Pasaoa",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Briahana-Mauge/CapstoneGroup1.git"
+    },
+    "keywords": [],
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Briahana-Mauge/CapstoneGroup1/issues"
+    },
+    "homepage": "https://github.com/Briahana-Mauge/CapstoneGroup1#readme"
+  },
+  "author": "Amine Bensalem",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AminesCodes/Endeavor_Redo_GraphQL-Apollo.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AminesCodes/Endeavor_Redo_GraphQL-Apollo/issues"
+  },
+  "homepage": "https://github.com/AminesCodes/Endeavor_Redo_GraphQL-Apollo#readme"
+}
