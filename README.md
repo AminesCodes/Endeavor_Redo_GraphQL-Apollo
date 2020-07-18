@@ -7,6 +7,7 @@ This project is a redo of the original Endeavor (a group project) that you can f
 The Redo objectives are:
   - Use MongoDB instead of PostgreSQL
   - Use GraphQL for accessing data
+  - Use token for user authentication
   - Use Apollo to do the network requests
 
 ## **Developers**
