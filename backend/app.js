@@ -7,7 +7,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const graphqlHTTP = require('express-graphql');
+const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema/schema');
 
 // const indexRouter = require('./routes/index');
@@ -36,7 +36,11 @@ mongoose.connection.once('open', () => {
 
 // app.use('/', indexRouter);
 // app.use('/api/users', usersRouter);
-app.use('/api/graphql', graphqlHTTP({ schema, graphiql: true }));
+// app.use('/api/graphql', graphqlHTTP({ schema, graphiql: true }));
+app.use('/api/graphql', graphqlHTTP({
+    schema,
+    graphiql: true
+}));
 
 
 const port = process.env.PORT || '2723'
