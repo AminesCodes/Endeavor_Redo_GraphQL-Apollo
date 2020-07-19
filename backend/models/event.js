@@ -15,6 +15,7 @@ const adminSchema = new Schema({
     numberOfVolunteers: Number,
     materialsUrl: { type: String, required: true , default: '' },
     important: { type: Boolean, required: true , default: false },
+    created: { type: Date, required: true , default: Date.now },
     deleted: Date
 });
 
