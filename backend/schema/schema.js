@@ -19,8 +19,8 @@ const Admin = require('../models/admin');
 // const Cohort = require('../models/cohort');
 // const Event = require('../models/event');
 // const Fellow = require('../models/fellow');
-// const Field = require('../models/field');
-// const Skill = require('../models/skill');
+const Field = require('../models/field');
+const Skill = require('../models/skill');
 const User = require('../models/user');
 const Volunteer = require('../models/volunteer');
 // const VolunteerField = require('../models/volunteerField');
@@ -84,14 +84,22 @@ const VolunteerType = new GraphQLObjectType({
                 return User.findById(parent.userId);
             }
         },
-        // skills: {
-        //     type: new GraphQLList(VolunteerSkillType),
-        //     resolve(parent, args) {
-        //         return VolunteerSkill.find({volunteerId: parent.id});
-        //     }
-        //     ... get the skills as well after that
+        // skillsList: {
+        //     type: new GraphQLList(SkillType),
+            // resolve(parent, args) {
+            //     return VolunteerSkill.find({volunteerId: parent.id});
+            // }
+            // ... get the skills as well after that
         // },
         // interests: {},
+    })
+})
+
+const SkillType = new GraphQLObjectType({
+    name: 'Skill',
+    fields: () => ({
+        id: { type: GraphQLID },
+        skill: { type: GraphQLString }
     })
 })
 
@@ -110,20 +118,6 @@ const VolunteerType = new GraphQLObjectType({
 //     })
 // })
 
-// const SkillType = new GraphQLObjectType({
-//     name: 'Skill',
-//     fields: () => ({
-//         id: { type: GraphQLID},
-//         skill: { type: GraphQLString},
-//         deleted: { type: GraphQLString },
-//         // volunteers: {
-//         //     type: new GraphQLList(VolunteerType),
-//         //     resolve(parent, args) {
-//         //         // return _.filter(books, {authorId: parent.id})
-//         //     }
-//         // }
-//     })
-// });
 
 module.exports = {
     UserType,
@@ -166,7 +160,7 @@ const RootQuery = new GraphQLObjectType({
 
         volunteer: {
             type: VolunteerType,
-            args: { id: {type: GraphQLID}}, 
+            args: { id: {type: GraphQLID} }, 
             resolve(parent, args){ 
                 return Volunteer.findById(args.id)
             }
@@ -178,6 +172,21 @@ const RootQuery = new GraphQLObjectType({
                 return Volunteer.find({})
             }
         },
+
+        skill: {
+            type: SkillType,
+            args: { id: {type: GraphQLID} },
+            resolve(parent, args) {
+                return Skill.findById(args.id);
+            }
+        },
+
+        skills: {
+            type: new GraphQLList(SkillType),
+            resolve(parent, args) {
+                return Skill.find({});
+            }
+        }
     }
 });
 
@@ -214,7 +223,6 @@ const Mutation = new GraphQLObjectType({
                     userId: args.userId,
                     // admin: args.admin,
                 }); 
-                newAdmin.save();
                 return newAdmin.save();
             }
         },
@@ -247,9 +255,22 @@ const Mutation = new GraphQLObjectType({
                 }); 
                 const savedVolunteer = await newVolunteer.save();
 
-                
+
                 
                 return savedVolunteer;
+            }
+        },
+
+        addSkill: {
+            type: SkillType,
+            args: {
+                skill: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const newSkill = new Skill({
+                    skill: args.skill
+                }); 
+                return newSkill.save();
             }
         },
     }
