@@ -16,7 +16,7 @@ const formatStr = str => {
 }
 
 const Admin = require('../models/admin');
-// const Cohort = require('../models/cohort');
+const Cohort = require('../models/cohort');
 // const Event = require('../models/event');
 // const Fellow = require('../models/fellow');
 const Interest = require('../models/interest');
@@ -109,6 +109,15 @@ const InterestType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         interest: { type: GraphQLString }
+    })
+})
+
+const CohortType = new GraphQLObjectType({
+    name: 'Cohort',
+    fields: () => ({
+        id: { type: GraphQLID },
+        cohort: { type: GraphQLString },
+        class: { type: GraphQLString }
     })
 })
 
@@ -210,6 +219,22 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return Interest.find({});
             }
+        },
+
+        cohort: {
+            type: CohortType,
+            args: { id: {type: GraphQLID} },
+            resolve(parent, args) {
+                return Cohort.findById(args.id);
+            }
+        },
+
+        cohorts: {
+            type: new GraphQLList(CohortType),
+            resolve(parent, args) {
+                return Cohort.find({}).sort([['cohort', 1]]);
+                return Cohort.find({}).sort([['class', 1], ['cohort', -1]]).limit(2);
+            }
         }
     }
 });
@@ -308,6 +333,21 @@ const Mutation = new GraphQLObjectType({
                     interest: args.interest
                 }); 
                 return newInterest.save();
+            }
+        },
+
+        addCohort: {
+            type: CohortType,
+            args: {
+                cohort: { type: new GraphQLNonNull(GraphQLString) },
+                class: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const newCohort = new Cohort({
+                    cohort: args.cohort,
+                    class: args.class
+                }); 
+                return newCohort.save();
             }
         },
     }

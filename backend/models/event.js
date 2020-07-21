@@ -8,14 +8,14 @@ const adminSchema = new Schema({
     end: { type: Date, required: true },
     topic: { type: String, required: true },
     description: { type: String, required: true },
-    staffDescription: String,
+    staffDescription: { type: String, default: '' },
     attendees: { type: mongoose.Schema.Types.ObjectId, ref: 'Cohort'},
     location: { type: String, required: true },
     instructor: { type: String, required: true },
     numberOfVolunteers: Number,
-    materialsUrl: { type: String, required: true , default: '' },
-    important: { type: Boolean, required: true , default: false },
-    created: { type: Date, required: true , default: Date.now },
+    materialsUrl: { type: String, default: '' },
+    important: { type: Boolean, default: false },
+    created: { type: Date, default: Date.now },
     deleted: Date
 });
 

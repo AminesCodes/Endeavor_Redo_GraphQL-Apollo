@@ -15,7 +15,7 @@ const fellowSchema = new Schema({
     wantMentor: { type: Boolean, default: false },
     eGrid: { type: Boolean, default: true },
     vGrid: { type: Boolean, default: true },
-    created: { type: Date, required: true , default: Date.now },
+    created: { type: Date, default: Date.now },
     deleted: Date
 });
 

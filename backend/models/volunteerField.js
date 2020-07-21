@@ -7,5 +7,7 @@ const volunteerFieldSchema = new Schema({
     volunteerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Volunteer'},
     fieldId: { type: mongoose.Schema.Types.ObjectId, ref: 'Field'},
 });
+// Unique constrain on the combination of volunteerId, fieldId
+volunteerFieldSchema.index({ volunteerId: 1, fieldId: 1 }, { unique: true });
 
 module.exports = mongoose.model('VolunteerSkill', volunteerFieldSchema);
