@@ -18,12 +18,13 @@ const formatStr = str => {
 const Admin = require('../models/admin');
 const Cohort = require('../models/cohort');
 // const Event = require('../models/event');
-// const Fellow = require('../models/fellow');
+const Fellow = require('../models/fellow');
 const Interest = require('../models/interest');
 const Skill = require('../models/skill');
 const User = require('../models/user');
 const Volunteer = require('../models/volunteer');
 const interest = require('../models/interest');
+const fellow = require('../models/fellow');
 // const VolunteerField = require('../models/volunteerField');
 // const VolunteerSkill = require('../models/volunteerSkill');
 
@@ -96,6 +97,37 @@ const VolunteerType = new GraphQLObjectType({
     })
 })
 
+const FellowType = new GraphQLObjectType({
+    name: 'Fellow',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        userId: { type: GraphQLID },
+        picture: { type: GraphQLString },
+        cohortId: { type: GraphQLID },
+        bio: { type: GraphQLString },
+        linkedIn: { type: GraphQLString },
+        github: { type: GraphQLString },
+        wantMentor: { type: GraphQLBoolean },
+        eGrid: { type: GraphQLBoolean },
+        vGrid: { type: GraphQLBoolean },
+        deleted: { type: GraphQLString },
+        created: { type: GraphQLString },
+        identification: {
+            type: UserType,
+            resolve(parent, args) {
+                return User.findById(parent.userId);
+            }
+        },
+        cohort: {
+            type: CohortType,
+            resolve(parent, args) {
+                return Cohort.findById(parent.cohortId);
+            }
+        }
+    })
+})
+
 const SkillType = new GraphQLObjectType({
     name: 'Skill',
     fields: () => ({
@@ -121,26 +153,6 @@ const CohortType = new GraphQLObjectType({
     })
 })
 
-// const AuthorType = new GraphQLObjectType({
-//     name: 'Author',
-//     fields: () => ({
-//         id: { type: GraphQLID},
-//         name: { type: GraphQLString},
-//         age: { type: GraphQLInt},
-//         books: {
-//             type: new GraphQLList(BookType),
-//             resolve(parent, args) {
-//                 return Book.find({authorId: parent.id});
-//             }
-//         }
-//     })
-// })
-
-
-module.exports = {
-    UserType,
-    AdminType,
-}
 
 
 const RootQuery = new GraphQLObjectType({
@@ -188,6 +200,21 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(VolunteerType),
             resolve(parent, args){ 
                 return Volunteer.find({})
+            }
+        },
+
+        fellow: {
+            type: FellowType,
+            args: { id: {type: GraphQLID} }, 
+            resolve(parent, args){ 
+                return Fellow.findById(args.id)
+            }
+        },
+
+        fellows: {
+            type: new GraphQLList(FellowType),
+            resolve(parent, args){ 
+                return Fellow.find({})
             }
         },
 
@@ -294,6 +321,49 @@ const Mutation = new GraphQLObjectType({
                 });
                 const savedUser = await newUser.save();
                 
+                const newVolunteer = new Volunteer({
+                    name: args.name,
+                    userId: savedUser._id,
+                    company: args.company,
+                    parsedCompany: formatStr(args.company),
+                    title: args.title,
+                    publicProfile: args.publicProfile
+                }); 
+                const savedVolunteer = await newVolunteer.save();
+
+
+                
+                return savedVolunteer;
+            }
+        },
+
+        addFellow: {
+            type: FellowType,
+            args: {
+                email: { type: new GraphQLNonNull(GraphQLString) },
+                password: { type: new GraphQLNonNull(GraphQLString) },
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                cohortId: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(parent, args) {
+                const existingUser = await User.findOne({ email: args.email});
+                if (existingUser) {
+                    // TODO: COMPARE ENCRYPTED PASSWORDS
+                    if (existingUser.password === args.password) {
+                        const newFellow = new Fellow({
+                            name: args.name,
+                            userId: existingUser._id,
+                            cohortId: args.cohortId,
+                        }); 
+                        return newFellow.save();
+                    } else {
+                        // TODO: FIND A WAY TO HANDLE ERROR: password not matching
+                        return null
+                    }
+                }
+                // TODO: FIND A WAY TO HANDLE ERROR: user does not exist
+                return null;
+                                
                 const newVolunteer = new Volunteer({
                     name: args.name,
                     userId: savedUser._id,
