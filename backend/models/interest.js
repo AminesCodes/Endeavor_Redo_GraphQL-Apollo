@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const fieldSchema = new Schema({
-    field: { type: String, required: true }
+const interestSchema = new Schema({
+    interest: { type: String, required: true, unique: true }
 });
 
-module.exports = mongoose.model('Field', fieldSchema);
+module.exports = mongoose.model('Interest', interestSchema);

@@ -19,10 +19,11 @@ const Admin = require('../models/admin');
 // const Cohort = require('../models/cohort');
 // const Event = require('../models/event');
 // const Fellow = require('../models/fellow');
-const Field = require('../models/field');
+const Interest = require('../models/interest');
 const Skill = require('../models/skill');
 const User = require('../models/user');
 const Volunteer = require('../models/volunteer');
+const interest = require('../models/interest');
 // const VolunteerField = require('../models/volunteerField');
 // const VolunteerSkill = require('../models/volunteerSkill');
 
@@ -100,6 +101,14 @@ const SkillType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         skill: { type: GraphQLString }
+    })
+})
+
+const InterestType = new GraphQLObjectType({
+    name: 'Interest',
+    fields: () => ({
+        id: { type: GraphQLID },
+        interest: { type: GraphQLString }
     })
 })
 
@@ -186,6 +195,21 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return Skill.find({});
             }
+        },
+
+        interest: {
+            type: InterestType,
+            args: { id: {type: GraphQLID} },
+            resolve(parent, args) {
+                return Interest.findById(args.id);
+            }
+        },
+
+        interests: {
+            type: new GraphQLList(InterestType),
+            resolve(parent, args) {
+                return Interest.find({});
+            }
         }
     }
 });
@@ -271,6 +295,19 @@ const Mutation = new GraphQLObjectType({
                     skill: args.skill
                 }); 
                 return newSkill.save();
+            }
+        },
+
+        addInterest: {
+            type: InterestType,
+            args: {
+                interest: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const newInterest = new Interest({
+                    interest: args.interest
+                }); 
+                return newInterest.save();
             }
         },
     }
