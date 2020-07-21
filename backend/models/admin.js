@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
     name: { type: String, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
     picture: { type: String, trim: true, default: '' },
     // admin: { type: Boolean, default: false },
     eGrid: { type: Boolean, default: true },

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const volunteerSchema = new Schema({
     name: { type: String, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true },
     picture: { type: String, trim: true, default: '' },
     confirmed: { type: Boolean, default: false },
     company: { type: String, required: true, trim: true },
