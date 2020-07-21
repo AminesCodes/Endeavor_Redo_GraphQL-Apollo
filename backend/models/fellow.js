@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const fellowSchema = new Schema({
-    // email: { type: String, required: true, lowercase: true, trim: true },
     name: { type: String, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true },
     picture: { type: String, trim: true, default: '' },

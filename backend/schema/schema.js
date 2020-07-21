@@ -86,14 +86,18 @@ const VolunteerType = new GraphQLObjectType({
                 return User.findById(parent.userId);
             }
         },
-        // skillsList: {
-        //     type: new GraphQLList(SkillType),
-            // resolve(parent, args) {
-            //     return VolunteerSkill.find({volunteerId: parent.id});
-            // }
-            // ... get the skills as well after that
-        // },
-        // interests: {},
+        skillsList: {
+            type: new GraphQLList(SkillType),
+            resolve(parent, args) {
+                return Skill.find({ _id: {$in:  parent.skills} })
+            }
+        },
+        interestsList: {
+            type: new GraphQLList(InterestType),
+            resolve(parent, args) {
+                return Interest.find({ _id: {$in:  parent.interests} })
+            }
+        },
     })
 })
 
