@@ -11,6 +11,7 @@ const Volunteer = require('../models/volunteer');
 const users = require('../seed/users');
 const skills = require('./skills');
 const interests = require('./interests');
+const cohorts = require('./cohorts')
 
 const createUsers = () => {
     users.forEach(user => {
@@ -33,8 +34,16 @@ const createInterests = () => {
     })
 }
 
+const createCohorts = () => {
+    cohorts.forEach(cohort => {
+        const newCohort = new Cohort(cohort)
+        newCohort.save()
+    })
+}
+
 module.exports = {
     createUsers,
     createSkills,
     createInterests,
+    createCohorts,
 }

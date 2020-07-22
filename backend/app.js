@@ -48,6 +48,7 @@ app.use('/api/seed', () => {
     // seed.createUsers();
     // seed.createSkills();
     // seed.createInterests();
+    // seed.createCohorts();
 });
 
 
