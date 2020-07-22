@@ -17,7 +17,7 @@ const formatStr = str => {
 
 const Admin = require('../models/admin');
 const Cohort = require('../models/cohort');
-// const Event = require('../models/event');
+const Event = require('../models/event');
 const Fellow = require('../models/fellow');
 const Interest = require('../models/interest');
 const Skill = require('../models/skill');
