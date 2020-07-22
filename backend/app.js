@@ -38,12 +38,13 @@ app.use('/api/graphql', graphqlHTTP({
     graphiql: true
 }));
 
-app.use('/api/seed', (req, res) => {
+app.use('/api/seed', async (req, res) => {
     console.log('Seeding database')
     // seed.createUsers();
     // seed.createSkills();
     // seed.createInterests();
     // seed.createCohorts();
+    // seed.createFellows();
     res.send('Database Seeded')
 });
 
