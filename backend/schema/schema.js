@@ -289,17 +289,27 @@ const Mutation = new GraphQLObjectType({
         addAdmin: {
             type: AdminType,
             args: {
+                email: { type: new GraphQLNonNull(GraphQLString) },
+                password: { type: new GraphQLNonNull(GraphQLString) },
                 name: { type: new GraphQLNonNull(GraphQLString) },
-                userId: { type: new GraphQLNonNull(GraphQLID) },
-                // admin: { type: new GraphQLNonNull(GraphQLBoolean) },
             },
-            resolve(parent, args) {
-                const newAdmin = new Admin({
-                    name: args.name,
-                    userId: args.userId,
-                    // admin: args.admin,
-                }); 
-                return newAdmin.save();
+            async resolve(parent, args) {
+                const existingUser = await User.findOne({ email: args.email});
+                if (existingUser && (existingUser.role === 'admin' || existingUser.role === 'staff')) {
+                    // TODO: COMPARE ENCRYPTED PASSWORDS
+                    if (existingUser.password === args.password) {
+                        const newAdmin = new Admin({
+                            name: args.name,
+                            userId: existingUser._id,
+                        }); 
+                        return newAdmin.save();
+                    } else {
+                        // TODO: FIND A WAY TO HANDLE ERROR: password not matching
+                        return null
+                    }
+                }
+                // TODO: FIND A WAY TO HANDLE ERROR: user does not exist
+                return null;
             }
         },
 
@@ -329,11 +339,7 @@ const Mutation = new GraphQLObjectType({
                     title: args.title,
                     publicProfile: args.publicProfile
                 }); 
-                const savedVolunteer = await newVolunteer.save();
-
-
-                
-                return savedVolunteer;
+                return newVolunteer.save();
             }
         },
 
@@ -347,7 +353,7 @@ const Mutation = new GraphQLObjectType({
             },
             async resolve(parent, args) {
                 const existingUser = await User.findOne({ email: args.email});
-                if (existingUser) {
+                if (existingUser && existingUser.role === 'fellow') {
                     // TODO: COMPARE ENCRYPTED PASSWORDS
                     if (existingUser.password === args.password) {
                         const newFellow = new Fellow({
@@ -363,20 +369,6 @@ const Mutation = new GraphQLObjectType({
                 }
                 // TODO: FIND A WAY TO HANDLE ERROR: user does not exist
                 return null;
-                                
-                const newVolunteer = new Volunteer({
-                    name: args.name,
-                    userId: savedUser._id,
-                    company: args.company,
-                    parsedCompany: formatStr(args.company),
-                    title: args.title,
-                    publicProfile: args.publicProfile
-                }); 
-                const savedVolunteer = await newVolunteer.save();
-
-
-                
-                return savedVolunteer;
             }
         },
 

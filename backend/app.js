@@ -10,8 +10,6 @@ const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema/schema');
 
-// const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
 const seed = require('./seed/seed');
 
 const app = express();
@@ -35,9 +33,6 @@ mongoose.connection.once('open', () => {
 })
 
 
-// app.use('/', indexRouter);
-// app.use('/api/users', usersRouter);
-// app.use('/api/graphql', graphqlHTTP({ schema, graphiql: true }));
 app.use('/api/graphql', graphqlHTTP({
     schema,
     graphiql: true
