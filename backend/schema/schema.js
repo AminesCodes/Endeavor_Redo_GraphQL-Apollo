@@ -23,10 +23,6 @@ const Interest = require('../models/interest');
 const Skill = require('../models/skill');
 const User = require('../models/user');
 const Volunteer = require('../models/volunteer');
-const interest = require('../models/interest');
-const fellow = require('../models/fellow');
-// const VolunteerField = require('../models/volunteerField');
-// const VolunteerSkill = require('../models/volunteerSkill');
 
 
 const UserType = new GraphQLObjectType({

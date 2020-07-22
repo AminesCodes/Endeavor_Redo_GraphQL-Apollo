@@ -46,6 +46,8 @@ app.use('/api/graphql', graphqlHTTP({
 app.use('/api/seed', () => {
     console.log('Seeding database')
     // seed.createUsers();
+    // seed.createSkills();
+    // seed.createInterests();
 });
 
 
