@@ -12,6 +12,7 @@ const schema = require('./schema/schema');
 
 // const indexRouter = require('./routes/index');
 // const usersRouter = require('./routes/users');
+const seed = require('./seed/seed');
 
 const app = express();
 app.use(cors());
@@ -41,6 +42,11 @@ app.use('/api/graphql', graphqlHTTP({
     schema,
     graphiql: true
 }));
+
+app.use('/api/seed', () => {
+    console.log('Seeding database')
+    // seed.createUsers();
+});
 
 
 const port = process.env.PORT || '2723'
