@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const fellowSchema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, index: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true },
     picture: { type: String, trim: true, default: '' },
     cohortId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cohort', required: true},
