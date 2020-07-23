@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const volunteerSchema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, index: true },
+    slug: { type: String, required: true, unique: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true },
     picture: { type: String, trim: true, default: '' },
     confirmed: { type: Boolean, default: false },
     company: { type: String, required: true, trim: true },
-    parsedCompany: { type: String, required: true, lowercase: true, trim: true },
+    parsedCompany: { type: String, required: true, lowercase: true, trim: true, index: true },
     title: { type: String, required: true, trim: true },
     bio: { type: String, trim: true, default: '' },
     linkedIn: { type: String, trim: true, default: '' },
