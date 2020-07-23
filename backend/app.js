@@ -45,6 +45,10 @@ app.use('/api/seed', async (req, res) => {
     // seed.createInterests();
     // seed.createCohorts();
     // seed.createFellows();
+    // seed.createVolunteers();
+    // seed.createEvents();
+    // seed.createAdmins();
+    // seed.createEventVolunteers();
     res.send('Database Seeded')
 });
 
