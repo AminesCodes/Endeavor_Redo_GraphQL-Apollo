@@ -17,6 +17,10 @@ const volunteerSchema = new Schema({
     publicProfile: { type: Boolean, default: false },
     skills: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Skill' }],
     interests: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Field' }],
+    events:{
+        confirmed: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Event' }],
+        pending: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Event' }]
+        },
     eGrid: { type: Boolean, default: true },
     vGrid: { type: Boolean, default: true },
     created: { type: Date, required: true , default: Date.now },

@@ -12,7 +12,11 @@ const adminSchema = new Schema({
     attendees: { type: mongoose.Schema.Types.ObjectId, ref: 'Cohort'},
     location: { type: String, required: true },
     instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    numberOfVolunteers: Number,
+    numberOfVolunteers: { type: Number, default: 1 },
+    volunteers:{
+        confirmed: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Volunteer' }],
+        pending: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Volunteer' }]
+        },
     materialsUrl: { type: String, default: '' },
     important: { type: Boolean, default: false },
     created: { type: Date, default: Date.now },
