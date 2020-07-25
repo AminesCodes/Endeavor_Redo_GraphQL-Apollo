@@ -315,6 +315,21 @@ const RootQuery = new GraphQLObjectType({
                 return Cohort.find({}).sort([['cohort', 1]]);
                 return Cohort.find({}).sort([['class', 1], ['cohort', -1]]).limit(2);
             }
+        },
+
+        event: {
+            type: EventType,
+            args: { id: {type: GraphQLID} },
+            resolve(parent, args) {
+                return Event.findById(args.id);
+            }
+        },
+
+        events: {
+            type: new GraphQLList(EventType),
+            resolve(parent, args) {
+                return Event.find({}).sort([['star', 1], ['end', -1]]);
+            }
         }
     }
 });
