@@ -44,11 +44,11 @@ app.use('/api/seed', async (req, res) => {
     // seed.createSkills();
     // seed.createInterests();
     // seed.createCohorts();
+    // seed.createAdmins();
     // seed.createFellows();
     // seed.createVolunteers();
     // seed.createEvents();
-    // seed.createAdmins();
-    // seed.createEventVolunteers();
+    seed.addVolunteersToEvents();
     res.send('Database Seeded')
 });
 

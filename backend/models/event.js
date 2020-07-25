@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const adminSchema = new Schema({
+const eventSchema = new Schema({
     start: { type: Date, required: true },
     end: { type: Date, required: true },
     topic: { type: String, required: true, index: true },
@@ -23,4 +23,11 @@ const adminSchema = new Schema({
     deleted: Date
 });
 
-module.exports = mongoose.model('Event', adminSchema);
+// eventSchema.post('save', async function(next){
+// // eventSchema.pre('save', {query: false, document: true}, async function(next){
+//     const test = this.materialsUrl
+//     console.log('test', test)
+//     // next()
+// })
+
+module.exports = mongoose.model('Event', eventSchema);

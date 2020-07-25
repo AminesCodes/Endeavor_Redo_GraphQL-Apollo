@@ -187,6 +187,50 @@ const createEvents = async () => {
     })
 }
 
+const addVolunteersToEvents = async () => {
+    const promises = [];
+    promises.push(getAllEvents());
+    promises.push(getVolunteersList());
+    const [ eventsList, volunteersList ] = await Promise.all(promises);
+
+    
+    for (let event of eventsList) {
+        const allVolunteers = [...volunteersList]
+        const pendingVolunteer = generateRandomUniques(allVolunteers, 5);
+        const confirmedVolunteers = pendingVolunteer.splice(0, 2);
+        event.volunteers = {
+            confirmed: confirmedVolunteers,
+            pending: pendingVolunteer
+        }
+        event.save((err, updatedEvent) => {
+            if (err) {
+                console.log('ERROR - UPDATE EVENT', err)
+            }
+            for (let volunteerId of updatedEvent.volunteers.confirmed) {
+                Volunteer.findById(volunteerId, (error, volunteer) => {
+                    if (!volunteer.events.confirmed.includes(updatedEvent._id)) {
+                        volunteer.events.confirmed.push(updatedEvent._id);
+                    }
+                    volunteer.save()
+                })
+            }
+            for (let volunteerId of updatedEvent.volunteers.pending) {
+                Volunteer.findById(volunteerId, (error, volunteer) => {
+                    if (!volunteer.events.pending.includes(updatedEvent._id)) {
+                        volunteer.events.pending.push(updatedEvent._id);
+                    }
+                    volunteer.save()
+                })
+            }
+        });
+    }
+    // eventsList[0].updateOne({}, {materialsUrl: 'testURL'})
+    // Event.updateOne({_id: eventsList[0]._id}, {materialsUrl: 'testURL'})
+    // eventsList[0].materialsUrl = 'test url, to be deleted later'
+    // eventsList[0].save()
+    // eventsList[0].save((err, updatedEvent) => {})
+    // console.log('Called', eventsList[0]._id)
+}
 // const createEventVolunteers = async () => {
 //     EventVolunteer.collection.drop();
 //     const promises = [];
@@ -223,4 +267,5 @@ module.exports = {
     createVolunteers,
     createEvents,
     // createEventVolunteers,
+    addVolunteersToEvents,
 }
