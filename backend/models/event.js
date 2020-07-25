@@ -11,7 +11,7 @@ const eventSchema = new Schema({
     staffDescription: { type: String, default: '' },
     attendees: { type: mongoose.Schema.Types.ObjectId, ref: 'Cohort'},
     location: { type: String, required: true },
-    instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
     numberOfVolunteers: { type: Number, default: 1 },
     volunteers:{
         confirmed: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Volunteer' }],

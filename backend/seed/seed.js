@@ -175,7 +175,7 @@ const createEvents = async () => {
     Event.collection.drop();
     const promises = [];
     promises.push(getAllCohorts());
-    promises.push(getAdminAndStaffUsers());
+    promises.push(getAdminsList());
     const [ cohorts, instructors ] = await Promise.all(promises);
     instructors.splice(0, 1);
     

@@ -30,7 +30,6 @@ const UserType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         email: { type: GraphQLString },
-        // password: { type: GraphQLString },
         role: { type: GraphQLString },
         deleted: { type: GraphQLString },
         created: { type: GraphQLString }
@@ -94,6 +93,18 @@ const VolunteerType = new GraphQLObjectType({
                 return Interest.find({ _id: {$in:  parent.interests} })
             }
         },
+        confirmedEvents: {
+            type: new GraphQLList(EventType),
+            resolve(parent, args) {
+                return Event.find({ _id: {$in:  parent.events.confirmed} })
+            }
+        },
+        pendingEvents: {
+            type: new GraphQLList(EventType),
+            resolve(parent, args) {
+                return Event.find({ _id: {$in:  parent.events.pending} })
+            }
+        },
     })
 })
 
@@ -150,6 +161,48 @@ const CohortType = new GraphQLObjectType({
         id: { type: GraphQLID },
         cohort: { type: GraphQLString },
         class: { type: GraphQLString }
+    })
+})
+
+const EventType = new GraphQLObjectType({
+    name: 'Event',
+    fields: () => ({
+        id: { type: GraphQLID },
+        start: { type: GraphQLString },
+        end: { type: GraphQLString },
+        topic: { type: GraphQLString },
+        description: { type: GraphQLString },
+        staffDescription: { type: GraphQLString },
+        attendees: {
+            type: new GraphQLList(CohortType),
+            resolve(parent, args) {
+                return Cohort.find({ _id: {$in:  parent.attendees} })
+            }
+        },
+        location: { type: GraphQLString },
+        instructor: {
+            type: new GraphQLList(AdminType),
+            resolve(parent, args) {
+                return Admin.find({ _id: {$in:  parent.instructor} })
+            }
+        },
+        numberOfVolunteers: { type: GraphQLInt },
+        confirmedVolunteers: {
+            type: new GraphQLList(VolunteerType),
+            resolve(parent, args) {
+                return Volunteer.find({ _id: {$in:  parent.volunteers.confirmed} })
+            }
+        },
+        pendingVolunteers: {
+            type: new GraphQLList(VolunteerType),
+            resolve(parent, args) {
+                return Volunteer.find({ _id: {$in:  parent.volunteers.pending} })
+            }
+        },
+        materialsUrl: { type: GraphQLString },
+        important: { type: GraphQLBoolean },
+        created: { type: GraphQLString },
+        deleted: { type: GraphQLString }
     })
 })
 

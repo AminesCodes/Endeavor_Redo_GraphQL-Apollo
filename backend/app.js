@@ -48,7 +48,7 @@ app.use('/api/seed', async (req, res) => {
     // seed.createFellows();
     // seed.createVolunteers();
     // seed.createEvents();
-    seed.addVolunteersToEvents();
+    // seed.addVolunteersToEvents();
     res.send('Database Seeded')
 });
 
