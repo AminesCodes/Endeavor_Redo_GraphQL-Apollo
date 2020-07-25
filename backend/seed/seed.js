@@ -18,62 +18,7 @@ const volunteers = require('./volunteers');
 const events = require('./events');
 const admins = require('./admins');
 
-const createUsers = () => {
-    User.collection.drop();
-    users.forEach(user => {
-        const newUser = new User(user)
-        newUser.save()
-    })
-}
-
-const getAdminAndStaff = async () => {
-    return await User.find({ $or: [{role: 'admin'}, {role: 'staff'}] })
-}
-
-const getAllFellowUsers = async () => {
-    return await User.find({ role: 'fellow' })
-}
-
-const getAllVolunteerUsers = async () => {
-    return await User.find({ role: 'volunteer' })
-}
-
-const createSkills = () => {
-    Skill.collection.drop();
-    skills.forEach(skill => {
-        const newSkill = new Skill(skill)
-        newSkill.save()
-    })
-}
-
-const getAllSkills = async () => {
-    return await Skill.find({})
-}
-
-const createInterests = () => {
-    Interest.collection.drop();
-    interests.forEach(interest => {
-        const newInterest = new Interest(interest)
-        newInterest.save()
-    })
-}
-
-const getAllInterests = async () => {
-    return await Interest.find({})
-}
-
-const createCohorts = () => {
-    Cohort.collection.drop();
-    cohorts.forEach(cohort => {
-        const newCohort = new Cohort(cohort)
-        newCohort.save()
-    })
-}
-
-const getAllCohorts = async () => {
-    return await Cohort.find({})
-}
-
+// ################## HELPER FUNCTIONS #####################
 const generateRandomUniques = (arr, num) => {
     if (num > arr.length) {
         return arr
@@ -88,9 +33,85 @@ const generateRandomUniques = (arr, num) => {
     return uniques;
 }
 
+// ################## DB GET FUNCTIONS #####################
+
+const getAdminAndStaffUsers = async () => {
+    return await User.find({ $or: [{role: 'admin'}, {role: 'staff'}] })
+}
+
+const getAllFellowUsers = async () => {
+    return await User.find({ role: 'fellow' })
+}
+
+const getAllVolunteerUsers = async () => {
+    return await User.find({ role: 'volunteer' })
+}
+
+const getAllSkills = async () => {
+    return await Skill.find({})
+}
+
+const getAllInterests = async () => {
+    return await Interest.find({})
+}
+
+const getAllCohorts = async () => {
+    return await Cohort.find({})
+}
+
+const getAdminsList = async () => {
+    return await Admin.find({})
+}
+
+const getFellowsList = async () => {
+    return await Fellow.find({})
+}
+
+const getVolunteersList = async () => {
+    return await Volunteer.find({})
+}
+
+const getAllEvents = async () => {
+    return await Event.find({})
+}
+
+// ################## DB CREATE FUNCTIONS #####################
+
+const createUsers = () => {
+    User.collection.drop();
+    users.forEach(user => {
+        const newUser = new User(user)
+        newUser.save()
+    })
+}
+
+const createSkills = () => {
+    Skill.collection.drop();
+    skills.forEach(skill => {
+        const newSkill = new Skill(skill)
+        newSkill.save()
+    })
+}
+
+const createInterests = () => {
+    Interest.collection.drop();
+    interests.forEach(interest => {
+        const newInterest = new Interest(interest)
+        newInterest.save()
+    })
+}
+
+const createCohorts = () => {
+    Cohort.collection.drop();
+    cohorts.forEach(cohort => {
+        const newCohort = new Cohort(cohort)
+        newCohort.save()
+    })
+}
+
 const createAdmins = async () => {
     Admin.collection.drop();
-    const adminAndStaff = await getAdminAndStaff();
+    const adminAndStaff = await getAdminAndStaffUsers();
     admins.forEach(admin => {
         const firstName = (admin.name.split(' ')[0]).toLocaleLowerCase();
         const adminCredentials = adminAndStaff.filter(user =>  user.email.includes(firstName))[0];
@@ -98,10 +119,6 @@ const createAdmins = async () => {
         const newAdmin = new Admin(admin);
         newAdmin.save();
     })
-}
-
-const getAdminsList = async () => {
-    return await Admin.find({})
 }
 
 const createFellows = async () => {
@@ -120,10 +137,6 @@ const createFellows = async () => {
         const newFellow = new Fellow(fellow);
         newFellow.save();
     })
-}
-
-const getFellowsList = async () => {
-    return await Fellow.find({})
 }
 
 const createVolunteers = async () => {
@@ -158,15 +171,11 @@ const createVolunteers = async () => {
     })
 }
 
-const getVolunteersList = async () => {
-    return await Volunteer.find({})
-}
-
 const createEvents = async () => {
     Event.collection.drop();
     const promises = [];
     promises.push(getAllCohorts());
-    promises.push(getAdminAndStaff());
+    promises.push(getAdminAndStaffUsers());
     const [ cohorts, instructors ] = await Promise.all(promises);
     instructors.splice(0, 1);
     
@@ -178,33 +187,29 @@ const createEvents = async () => {
     })
 }
 
-const getAllEvents = async () => {
-    return await Event.find({})
-}
+// const createEventVolunteers = async () => {
+//     EventVolunteer.collection.drop();
+//     const promises = [];
+//     promises.push(getAllEvents());
+//     promises.push(getVolunteersList());
+//     const [ eventsList, volunteersList ] = await Promise.all(promises);
 
-const createEventVolunteers = async () => {
-    EventVolunteer.collection.drop();
-    const promises = [];
-    promises.push(getAllEvents());
-    promises.push(getVolunteersList());
-    const [ eventsList, volunteersList ] = await Promise.all(promises);
+//     for (let event of eventsList) {
+//         const randomVolunteer = generateRandomUniques(volunteersList, 3);
+//         for (let user of randomVolunteer) {
+//             const newEventVolunteer = new EventVolunteer({
+//                 eventId: event._id,
+//                 volunteerId: user._id,
+//                 confirmed: Math.random() > .7
+//             });
+//             newEventVolunteer.save();
+//         }
+//     }
+// }
 
-    for (let event of eventsList) {
-        const randomVolunteer = generateRandomUniques(volunteersList, 3);
-        for (let user of randomVolunteer) {
-            const newEventVolunteer = new EventVolunteer({
-                eventId: event._id,
-                volunteerId: user._id,
-                confirmed: Math.random() > .7
-            });
-            newEventVolunteer.save();
-        }
-    }
-}
-
-const getAllEventVolunteers = async () => {
-    return await EventVolunteer.find({});
-}
+// const getAllEventVolunteers = async () => {
+//     return await EventVolunteer.find({});
+// }
 
 
 
@@ -217,5 +222,5 @@ module.exports = {
     createFellows,
     createVolunteers,
     createEvents,
-    createEventVolunteers,
+    // createEventVolunteers,
 }
