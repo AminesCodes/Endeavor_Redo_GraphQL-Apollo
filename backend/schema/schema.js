@@ -334,6 +334,21 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
+const inputEventType = {
+    eventId: { type: GraphQLID },
+    start: { type: new GraphQLNonNull(GraphQLString) },
+    end: { type: new GraphQLNonNull(GraphQLString) },
+    topic: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: new GraphQLNonNull(GraphQLString) },
+    staffDescription: { type: GraphQLString },
+    attendees: { type: new GraphQLNonNull(GraphQLID) },
+    location: { type: new GraphQLNonNull(GraphQLString) },
+    instructor: { type: new GraphQLNonNull(GraphQLID) },
+    numberOfVolunteers: { type: GraphQLInt },
+    materialsUrl: { type: GraphQLString },
+    important: { type: GraphQLBoolean },
+};
+
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
@@ -480,6 +495,35 @@ const Mutation = new GraphQLObjectType({
                 return newCohort.save();
             }
         },
+
+        addEvent: {
+            type: EventType,
+            args: inputEventType,
+            resolve(parent, args) {
+                delete args.eventId;
+                const newEvent = new Event(args); 
+                return newEvent.save();
+            }
+        },
+
+        updateEvent: {
+            type: EventType,
+            args: inputEventType,
+            resolve(parent, args) {
+                if (!args.eventId) return null;
+                const updatedEvent = Event.findById(args.eventId, (err, targetEvent) => {
+                    if (err) {
+                        console.log(err);
+                        return null;
+                    } else {
+                        delete args.eventId;
+                        Object.assign(targetEvent, args);
+                        return targetEvent.save();
+                    }
+                });
+                return updatedEvent;
+            }
+        }
     }
 })
 
