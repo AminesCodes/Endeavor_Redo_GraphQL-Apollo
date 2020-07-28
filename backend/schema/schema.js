@@ -511,7 +511,7 @@ const Mutation = new GraphQLObjectType({
             args: inputEventType,
             resolve(parent, args) {
                 if (!args.eventId) return null;
-                const updatedEvent = Event.findById(args.eventId, (err, targetEvent) => {
+                return Event.findById(args.eventId, (err, targetEvent) => {
                     if (err) {
                         console.log(err);
                         return null;
@@ -521,9 +521,28 @@ const Mutation = new GraphQLObjectType({
                         return targetEvent.save();
                     }
                 });
-                return updatedEvent;
             }
-        }
+        },
+
+        volunteerForEvent: {
+            type: EventType,
+            args: {
+                eventId: { type: new GraphQLNonNull(GraphQLID) },
+                volunteerId: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Event.findById(args.eventId, (err, targetEvent) => {
+                    if (err) {
+                        console.log(100, err);
+                        return null;
+                    } else if (!targetEvent.volunteers.confirmed.includes(args.volunteerId) && !targetEvent.volunteers.pending.includes(args.volunteerId)) {
+                        targetEvent.volunteers.pending.push(args.volunteerId);
+                        return targetEvent.save();
+                    }
+                    return null;
+                });
+            }
+        },
     }
 })
 
