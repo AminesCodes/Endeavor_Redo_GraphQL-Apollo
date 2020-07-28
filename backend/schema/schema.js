@@ -543,6 +543,32 @@ const Mutation = new GraphQLObjectType({
                 });
             }
         },
+
+        removeVolunteerFromEvent: {
+            type: EventType,
+            args: {
+                eventId: { type: new GraphQLNonNull(GraphQLID) },
+                volunteerId: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Event.findById(args.eventId, (err, targetEvent) => {
+                    if (err) {
+                        console.log(err);
+                        return null;
+                    } else {
+                        indexAtPending = targetEvent.volunteers.pending.indexOf(args.volunteerId);
+                        indexAtConfirmed = targetEvent.volunteers.confirmed.indexOf(args.volunteerId);
+                        if (indexAtPending >= 0) {
+                            targetEvent.volunteers.pending.splice(indexAtPending, 1);
+                        }
+                        if (indexAtConfirmed >= 0) {
+                            targetEvent.volunteers.confirmed.splice(indexAtConfirmed, 1);
+                        }
+                        return targetEvent.save();
+                    }
+                });
+            }
+        },
     }
 })
 
