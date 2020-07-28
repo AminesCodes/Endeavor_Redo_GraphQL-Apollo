@@ -569,6 +569,30 @@ const Mutation = new GraphQLObjectType({
                 });
             }
         },
+
+        confirmVolunteerForEvent: {
+            type: EventType,
+            args: {
+                eventId: { type: new GraphQLNonNull(GraphQLID) },
+                volunteerId: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Event.findById(args.eventId, (err, targetEvent) => {
+                    if (err) {
+                        console.log(err);
+                        return null;
+                    } else {
+                        indexAtPending = targetEvent.volunteers.pending.indexOf(args.volunteerId);
+                        if (indexAtPending >= 0) {
+                            targetEvent.volunteers.pending.splice(indexAtPending, 1);
+                            targetEvent.volunteers.confirmed.push(args.volunteerId);
+                            return targetEvent.save();
+                        }
+                        return null // TODO: Could be error also
+                    }
+                });
+            }
+        },
     }
 })
 
