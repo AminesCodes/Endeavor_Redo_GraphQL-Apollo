@@ -11,7 +11,7 @@ const {
     GraphQLSchema 
 } = graphql;
 
-const { formatStr } = require('../helpers/helpers');
+const { formatStr, hashPassword, comparePasswords } = require('../helpers/helpers');
 
 const Admin = require('../models/admin');
 const Cohort = require('../models/cohort');
@@ -357,10 +357,11 @@ const Mutation = new GraphQLObjectType({
                 password: { type: new GraphQLNonNull(GraphQLString) },
                 role: { type: new GraphQLNonNull(GraphQLString) },
             },
-            resolve(parent, args) {
+            async resolve(parent, args) {
+                const hashedPassword = await hashPassword(args.password);
                 const newUser = new User({
                     email: args.email,
-                    password: args.password,
+                    password: hashedPassword,
                     role: args.role
                 });
                 return newUser.save();
@@ -377,8 +378,8 @@ const Mutation = new GraphQLObjectType({
             async resolve(parent, args) {
                 const existingUser = await User.findOne({ email: args.email});
                 if (existingUser && (existingUser.role === 'admin' || existingUser.role === 'staff')) {
-                    // TODO: COMPARE ENCRYPTED PASSWORDS
-                    if (existingUser.password === args.password) {
+                    const passwordMatch = await comparePasswords(args.password, existingUser.password);
+                    if (passwordMatch) {
                         const newAdmin = new Admin({
                             name: args.name,
                             userId: existingUser._id,
@@ -405,9 +406,10 @@ const Mutation = new GraphQLObjectType({
                 publicProfile: { type: GraphQLBoolean },
             },
             async resolve(parent, args) {
+                const hashedPassword = await hashPassword(args.password);
                 const newUser = new User({
                     email: args.email,
-                    password: args.password,
+                    password: hashedPassword,
                     role: 'volunteer'
                 });
                 const savedUser = await newUser.save();
@@ -435,8 +437,8 @@ const Mutation = new GraphQLObjectType({
             async resolve(parent, args) {
                 const existingUser = await User.findOne({ email: args.email});
                 if (existingUser && existingUser.role === 'fellow') {
-                    // TODO: COMPARE ENCRYPTED PASSWORDS
-                    if (existingUser.password === args.password) {
+                    const passwordMatch = await comparePasswords(args.password, existingUser.password);
+                    if (passwordMatch) {
                         const newFellow = new Fellow({
                             name: args.name,
                             userId: existingUser._id,
