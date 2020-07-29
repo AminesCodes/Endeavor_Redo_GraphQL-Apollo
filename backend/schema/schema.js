@@ -11,9 +11,7 @@ const {
     GraphQLSchema 
 } = graphql;
 
-const formatStr = str => {
-    return str.toLowerCase().replace(/[^a-z0-9]/g, '')
-}
+const { formatStr } = require('../helpers/helpers');
 
 const Admin = require('../models/admin');
 const Cohort = require('../models/cohort');
